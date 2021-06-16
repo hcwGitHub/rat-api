@@ -66,6 +66,10 @@ public class EntryService implements IEntryService{
                 emailUtils.sendEmail(ratEmailTemplate.getSubject(), twc.getCreator_email(),ratEmailTemplate.getContent());
             }
 
+            // 群发oc
+            RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(twc.getId().toString(),"oc","",twc.getProject_id(),"1",twc.getCreator());
+            emailUtils.sendEmailOcDept(ratEmailTemplate.getSubject(),ratEmailTemplate.getContent());
+
         }catch (Exception e){
             log.error(e.getMessage());
             throw  new BusinessException("save Twc entry failure");
@@ -111,10 +115,30 @@ public class EntryService implements IEntryService{
             RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(twc.getId().toString(),"mobility","",twc2.getProject_id(),"2",creator);
             emailUtils.sendEmail(ratEmailTemplate.getSubject(),creator_email,ratEmailTemplate.getContent());
         }
-        if (!StringUtils.isEmpty(send_email) && !send_email.equals(creator_email)){
-            RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(twc.getId().toString(),twc.getOc_mobility_type(),"",twc2.getProject_id(),"2",creator);
-            emailUtils.sendEmail(ratEmailTemplate.getSubject(),send_email,ratEmailTemplate.getContent());
+//        if (!StringUtils.isEmpty(send_email) && !send_email.equals(creator_email)){
+//            RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(twc.getId().toString(),twc.getOc_mobility_type(),"",twc2.getProject_id(),"2",creator);
+//            // 判断操作者类型, oc 还是 mobility 用户
+//           if ("oc".equals(twc.getOc_mobility_type())){
+//               // 群发Email
+//               emailUtils.sendEmailOcDept(ratEmailTemplate.getSubject(),ratEmailTemplate.getContent());
+//           }else {
+//               // 单独发mobility 用户
+//               emailUtils.sendEmail(ratEmailTemplate.getSubject(), send_email, ratEmailTemplate.getContent());
+//           }
+//
+//        }
+        RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(twc.getId().toString(),twc.getOc_mobility_type(),"",twc2.getProject_id(),"2",creator);
+        RatEmailTemplate ratEmailTemplate_oc =  new RatEmailTemplate(twc.getId().toString(),"oc","",twc2.getProject_id(),"2",creator);
+
+        if ("mobility".equalsIgnoreCase(twc.getOc_mobility_type())){
+            // 如果操作对象是mobility , 也应该通知这个人.
+            if (!StringUtils.isEmpty(send_email) && !send_email.equals(creator_email)) {
+                emailUtils.sendEmailOcDept(ratEmailTemplate.getSubject(), ratEmailTemplate.getContent());
+            }
         }
+        // 群发OC dept , 无论getOc_mobility_type 是什么,都必须通知OC dept
+        emailUtils.sendEmailOcDept(ratEmailTemplate_oc.getSubject(),ratEmailTemplate_oc.getContent());
+
 
     }
 
@@ -160,7 +184,12 @@ public class EntryService implements IEntryService{
             if (hir != null && !StringUtils.isEmpty(hir.getCreator()) && !StringUtils.isEmpty(hir.getCreator_email())){
                 RatEmailTemplate ratEmailTemplate =new RatEmailTemplate(hir.getId().toString(),"mobility","2",hir.getProject_no(),"1",hir.getCreator());
                 emailUtils.sendEmail(ratEmailTemplate.getSubject(), hir.getCreator_email(),ratEmailTemplate.getContent());
+
             }
+
+            // 群发oc
+            RatEmailTemplate ratEmailTemplate =new RatEmailTemplate(hir.getId().toString(),"oc","2",hir.getProject_no(),"1",hir.getCreator());
+            emailUtils.sendEmailOcDept(ratEmailTemplate.getSubject(),ratEmailTemplate.getContent());
 
 
         }catch (Exception e){
@@ -204,6 +233,9 @@ public class EntryService implements IEntryService{
                 RatEmailTemplate ratEmailTemplate =new RatEmailTemplate(hir.getId().toString(),"mobility","3",hir.getProject_no(),"1",hir.getCreator());
                 emailUtils.sendEmail(ratEmailTemplate.getSubject(), hir.getCreator_email(),ratEmailTemplate.getContent());
             }
+            // 群发oc
+            RatEmailTemplate ratEmailTemplate =new RatEmailTemplate(hir.getId().toString(),"oc","3",hir.getProject_no(),"1",hir.getCreator());
+            emailUtils.sendEmailOcDept(ratEmailTemplate.getSubject(),ratEmailTemplate.getContent());
 
         }catch (Exception e){
             log.error(e.getMessage());
@@ -253,10 +285,30 @@ public class EntryService implements IEntryService{
             RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(hir.getId().toString(),"mobility","2",hir2.getProject_no(),"2",creator);
             emailUtils.sendEmail(ratEmailTemplate.getSubject(),creator_email,ratEmailTemplate.getContent());
         }
-        if (!StringUtils.isEmpty(send_email) && !send_email.equals(creator_email)){
-            RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(hir.getId().toString(),hir.getOc_mobility_type(),"2",hir2.getProject_no(),"2",creator);
-            emailUtils.sendEmail(ratEmailTemplate.getSubject(),send_email,ratEmailTemplate.getContent());
+//        if (!StringUtils.isEmpty(send_email) && !send_email.equals(creator_email)){
+//            RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(hir.getId().toString(),hir.getOc_mobility_type(),"2",hir2.getProject_no(),"2",creator);
+////            emailUtils.sendEmail(ratEmailTemplate.getSubject(),send_email,ratEmailTemplate.getContent());
+//            // 判断操作者类型, oc 还是 mobility 用户
+//            if ("oc".equals(hir.getOc_mobility_type())){
+//                // 群发Email
+//                emailUtils.sendEmailOcDept(ratEmailTemplate.getSubject(),ratEmailTemplate.getContent());
+//            }else {
+//                // 单独发mobility 用户
+//                emailUtils.sendEmail(ratEmailTemplate.getSubject(), send_email, ratEmailTemplate.getContent());
+//            }
+//        }
+
+        RatEmailTemplate ratEmailTemplate =   new RatEmailTemplate(hir.getId().toString(),hir.getOc_mobility_type(),"2",hir2.getProject_no(),"2",creator);
+        RatEmailTemplate ratEmailTemplate_oc =   new RatEmailTemplate(hir.getId().toString(),"oc","2",hir2.getProject_no(),"2",creator);
+
+        if ("mobility".equalsIgnoreCase(hir.getOc_mobility_type())){
+            // 如果操作对象是mobility , 也应该通知这个人.
+            if (!StringUtils.isEmpty(send_email) && !send_email.equals(creator_email)) {
+                emailUtils.sendEmailOcDept(ratEmailTemplate.getSubject(), ratEmailTemplate.getContent());
+            }
         }
+        // 群发OC dept , 无论getOc_mobility_type 是什么,都必须通知OC dept
+        emailUtils.sendEmailOcDept(ratEmailTemplate_oc.getSubject(),ratEmailTemplate_oc.getContent());
 
     }
 
@@ -302,10 +354,31 @@ public class EntryService implements IEntryService{
             RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(hir.getId().toString(),"mobility","3",hir2.getProject_no(),"2",creator);
             emailUtils.sendEmail(ratEmailTemplate.getSubject(),creator_email,ratEmailTemplate.getContent());
         }
-        if (!StringUtils.isEmpty(send_email) && !send_email.equals(creator_email)){
-            RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(hir.getId().toString(),hir.getOc_mobility_type(),"3",hir2.getProject_no(),"2",creator);
-            emailUtils.sendEmail(ratEmailTemplate.getSubject(),send_email,ratEmailTemplate.getContent());
+//        if (!StringUtils.isEmpty(send_email) && !send_email.equals(creator_email)){
+//            RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(hir.getId().toString(),hir.getOc_mobility_type(),"3",hir2.getProject_no(),"2",creator);
+////            emailUtils.sendEmail(ratEmailTemplate.getSubject(),send_email,ratEmailTemplate.getContent());
+//            // 判断操作者类型, oc 还是 mobility 用户
+//            if ("oc".equals(hir.getOc_mobility_type())){
+//                // 群发Email
+//                emailUtils.sendEmailOcDept(ratEmailTemplate.getSubject(),ratEmailTemplate.getContent());
+//            }else {
+//                // 单独发mobility 用户
+//                emailUtils.sendEmail(ratEmailTemplate.getSubject(), send_email, ratEmailTemplate.getContent());
+//            }
+//        }
+
+        RatEmailTemplate ratEmailTemplate =   new RatEmailTemplate(hir.getId().toString(),hir.getOc_mobility_type(),"3",hir2.getProject_no(),"2",creator);
+        RatEmailTemplate ratEmailTemplate_oc =   new RatEmailTemplate(hir.getId().toString(),"oc","3",hir2.getProject_no(),"2",creator);
+
+        if ("mobility".equalsIgnoreCase(hir.getOc_mobility_type())){
+            // 如果操作对象是mobility , 也应该通知这个人.
+            if (!StringUtils.isEmpty(send_email) && !send_email.equals(creator_email)) {
+                emailUtils.sendEmailOcDept(ratEmailTemplate.getSubject(), ratEmailTemplate.getContent());
+            }
         }
+        // 群发OC dept , 无论getOc_mobility_type 是什么,都必须通知OC dept
+        emailUtils.sendEmailOcDept(ratEmailTemplate_oc.getSubject(),ratEmailTemplate_oc.getContent());
+
     }
 
     private boolean checkEditHir(EditHirEntryVo hir) {

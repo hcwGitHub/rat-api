@@ -154,10 +154,16 @@ public class EntryController {
             RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(hir.getId().toString(),"mobility","2",hir.getProject_no(),"2",creator);
             emailUtils.sendEmail(ratEmailTemplate.getSubject(),creator_email,ratEmailTemplate.getContent());
         }
-        if (!StringUtils.isEmpty(send_email) && !send_email.equals(creator_email)){
-            RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(hir.getId().toString(),"oc","2",hir.getProject_no(),"2",creator);
-            emailUtils.sendEmail(ratEmailTemplate.getSubject(),send_email,ratEmailTemplate.getContent());
-        }
+//        if (!StringUtils.isEmpty(send_email) && !send_email.equals(creator_email)){
+//            RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(hir.getId().toString(),"oc","2",hir.getProject_no(),"2",creator);
+////            emailUtils.sendEmail(ratEmailTemplate.getSubject(),send_email,ratEmailTemplate.getContent());
+//            // 群发oc dept email
+//            emailUtils.sendEmailOcDept(ratEmailTemplate.getSubject(),ratEmailTemplate.getContent());
+//        }
+
+        // 群发 OC  -- 新需求 2021-06-16
+        RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(hir.getId().toString(),"oc","2",hir.getProject_no(),"2",creator);
+        emailUtils.sendEmailOcDept(ratEmailTemplate.getSubject(),ratEmailTemplate.getContent());
 
         res.put("result", Sys.SUCCESS);
         res.put("msg",Sys.MESSAGE);
@@ -204,10 +210,15 @@ public class EntryController {
             RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(hir.getId().toString(),"mobility","3",hir.getProject_no(),"2",creator);
             emailUtils.sendEmail(ratEmailTemplate.getSubject(),creator_email,ratEmailTemplate.getContent());
         }
-        if (!StringUtils.isEmpty(send_email) && !send_email.equals(creator_email)){
-            RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(hir.getId().toString(),"oc","3",hir.getProject_no(),"2",creator);
-            emailUtils.sendEmail(ratEmailTemplate.getSubject(),send_email,ratEmailTemplate.getContent());
-        }
+//        if (!StringUtils.isEmpty(send_email) && !send_email.equals(creator_email)){
+//            RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(hir.getId().toString(),"oc","3",hir.getProject_no(),"2",creator);
+////            emailUtils.sendEmail(ratEmailTemplate.getSubject(),send_email,ratEmailTemplate.getContent());
+//            emailUtils.sendEmailOcDept(ratEmailTemplate.getSubject(),ratEmailTemplate.getContent());
+//        }
+
+        // 群发 OC  -- 新需求 2021-06-16
+        RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(hir.getId().toString(),"oc","3",hir.getProject_no(),"2",creator);
+        emailUtils.sendEmailOcDept(ratEmailTemplate.getSubject(),ratEmailTemplate.getContent());
 
         res.put("result", Sys.SUCCESS);
         res.put("msg",Sys.MESSAGE);
@@ -254,12 +265,22 @@ public class EntryController {
             RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(twc.getId().toString(),"mobility","",twc.getProject_id(),"2",creator);
             emailUtils.sendEmail(ratEmailTemplate.getSubject(),creator_email,ratEmailTemplate.getContent());
         }
-        if (!StringUtils.isEmpty(send_email) && !send_email.equals(creator_email)){
-            RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(twc.getId().toString(),"oc","",twc.getProject_id(),"2",creator);
-            emailUtils.sendEmail(ratEmailTemplate.getSubject(),send_email,ratEmailTemplate.getContent());
-            // testing my email
+//        if (!StringUtils.isEmpty(send_email) && !send_email.equals(creator_email)){
+//            RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(twc.getId().toString(),"oc","",twc.getProject_id(),"2",creator);
+////            emailUtils.sendEmail(ratEmailTemplate.getSubject(),send_email,ratEmailTemplate.getContent());
+//            // testing my email and an Oc account
 //            emailUtils.sendEmail(ratEmailTemplate.getSubject(),"972606984@qq.com",ratEmailTemplate.getContent());
-        }
+//            emailUtils.sendEmail(ratEmailTemplate.getSubject(),"lam.ngarmingdavid@chunwo.com",ratEmailTemplate.getContent());
+//
+//            // 群发
+//            emailUtils.sendEmailOcDept(ratEmailTemplate.getSubject(),ratEmailTemplate.getContent());
+//        }
+        // 群发 OC  -- 新需求 2021-06-16
+        RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(twc.getId().toString(),"oc","",twc.getProject_id(),"2",creator);
+        emailUtils.sendEmailOcDept(ratEmailTemplate.getSubject(),ratEmailTemplate.getContent());
+
+//        emailUtils.sendEmail(ratEmailTemplate.getSubject(),"972606984@qq.com",ratEmailTemplate.getContent());
+//        emailUtils.sendEmail(ratEmailTemplate.getSubject(),"sean.wan@chunwo.com",ratEmailTemplate.getContent());
 
         res.put("result", Sys.SUCCESS);
         res.put("msg",Sys.MESSAGE);

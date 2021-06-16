@@ -1,5 +1,6 @@
 package mk.anyplex.com.hmvodapi.common.tools;
 
+import lombok.Data;
 import mk.anyplex.com.hmvodapi.common.bean.OcAccount;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.List;
  * created by andy 2021-04-08
  *   check Oc account
  * */
+
 public class CheckOcAccount {
     // private
     private CheckOcAccount(){}
@@ -34,4 +36,11 @@ public class CheckOcAccount {
         return flag;
     }
 
+    public static List<OcAccount> getAcList() {
+        return acList;
+    }
+
+    public static void setAcList(List<OcAccount> acList) {
+        CheckOcAccount.acList = acList;
+    }
 }

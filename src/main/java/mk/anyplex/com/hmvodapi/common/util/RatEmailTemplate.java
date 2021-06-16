@@ -79,6 +79,10 @@ public class RatEmailTemplate {
     private RatEmailTemplate  getSyntheticEmailText(){
 
        String hyperlink = "https://mobility-uat.chunwo.com/projects/nd-2019-04/rat/informative?";
+       String link = "http://git.iman.io/#/";
+       String twcLink = link+"techdSection2/viewTwcDetail?id={id}&type={type}&email=0";
+       String hirOrHirTempLink = link+ "techdSection3/viewHirDetail?id={id}&type={type}&type_name={type_name}&email=0";
+
         content = "<html>\n" +
                 "<body>\n" +
                 " <div style='width:100%;'>" +
@@ -139,10 +143,29 @@ public class RatEmailTemplate {
 
         }
         // replace
-        this.content =
-                content.replace("{created}",created)
-                        .replace("{hyperlink}",hyperlink)
-                        .replace("{mainText}",mainText);
+
+        if ("mobility".equals(type)) {
+            this.content =
+                    content.replace("{created}", created)
+                            .replace("{hyperlink}", hyperlink)
+                            .replace("{mainText}", mainText);
+        }
+
+        // 新需求, 如果是OC 使用不一样的域名
+        if ("oc".equals(type)){
+            String linked = "";
+            if (StringUtils.isEmpty(type_name) || "1".equals(type_name)){
+                // twc
+                linked = twcLink.replace("{id}",id).replace("{type}",type);
+            }else {
+                // hir or hir temp ;
+                linked = hirOrHirTempLink.replace("{id}", id).replace("{type}", type).replace("{type_name}", type_name);
+            }
+
+           this.content = content.replace("{created}", created)
+                   .replace("{hyperlink}", linked)
+                   .replace("{mainText}", mainText);
+        }
 
         return this;
     }
