@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
-
 import javax.annotation.Resource;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -59,8 +58,8 @@ public class EmailUtils implements Serializable {
             helper.setText(text, true); // 设置成html 格式.
         } catch (Exception e) {
             String msg = "Invalid mailbox or mailbox does not exist";
-            log.info(msg);
-            log.info(e.getMessage()+e);
+            log.error(msg);
+            log.error(e.getMessage()+e);
             throw new BusinessException(msg);
         }
         javaMailSender.send(message);
