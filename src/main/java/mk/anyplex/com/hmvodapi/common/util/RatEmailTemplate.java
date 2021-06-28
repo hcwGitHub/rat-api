@@ -2,7 +2,12 @@ package mk.anyplex.com.hmvodapi.common.util;
 
 import lombok.Data;
 import org.springframework.util.StringUtils;
-
+/**
+ *  rat email Template
+ *  Generate subject, email content, etc.
+ *  created by andy 2021-06-15
+ *  email : 972606984@qq.com
+ * */
 @Data
 public class RatEmailTemplate {
 
@@ -54,12 +59,12 @@ public class RatEmailTemplate {
     private String created;
 
     /**
-     *  id
-     *  type: oc  or mobility
-     *  type_name : 0 twc , 1 hir 2 hir temp
-     *  projectId
-     *  operationType 1 created 2 update
-     *  created : creator
+     *  id：entry id, not null ;
+     *  type: oc  or mobility, not null ;
+     *  type_name : null or 1 is twc , 2 is hir  and 3 is hir temp;
+     *  projectId : project id or project project no, not null ;
+     *  operationType : 1 created , 2 update not null;
+     *  created : creator, current user  . not null;
      * */
     public RatEmailTemplate(String id, String type ,String type_name, String projectId, String operationType, String created) {
         this.id = id;
@@ -77,9 +82,16 @@ public class RatEmailTemplate {
      * @return String Email text
      * */
     private RatEmailTemplate  getSyntheticEmailText(){
+        // live 环境   openProject https://mobility.chunwo.com
+        // oc live https://oc.mobility.chunwo.com
+        String hyperlink = "https://mobility.chunwo.com/projects/nd-2019-04/rat/informative?";
+       String link = "https://oc.mobility.chunwo.com/#/" ;
 
-       String hyperlink = "https://mobility-uat.chunwo.com/projects/nd-2019-04/rat/informative?";
-       String link = "http://git.iman.io/#/";
+        // uat 环境
+//       String hyperlink = "https://mobility-uat.chunwo.com/projects/nd-2019-04/rat/informative?";
+//       String link = "http://git.iman.io/#/";
+
+
        String twcLink = link+"techdSection2/viewTwcDetail?id={id}&type={type}&email=0";
        String hirOrHirTempLink = link+ "techdSection3/viewHirDetail?id={id}&type={type}&type_name={type_name}&email=0";
 

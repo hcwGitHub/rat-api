@@ -17,11 +17,16 @@ public class CheckOcAccount {
     private  static List<OcAccount> acList ;
     static {
         acList = new ArrayList<>(16);
-        acList.add(new OcAccount("lam.ngarmingdavid@chunwo.com","cw12345678"));
-        acList.add(new OcAccount("abby.liu@chunwo.com","cw12345678"));
+//        acList.add(new OcAccount("lam.ngarmingdavid@chunwo.com","cw12345678"));
+//        acList.add(new OcAccount("abby.liu@chunwo.com","cw12345678"));
         acList.add(new OcAccount("sean.wan@chunwo.com","cw12345678"));
         acList.add(new OcAccount("lego.chan@chunwo.com","cw12345678"));
         acList.add(new OcAccount("kester.leung@chunwo.com","cw12345678"));
+
+        // testing
+        acList.add(new OcAccount("972606984@qq.com","cw12345678"));
+        acList.add(new OcAccount(" cclegochan@gmail.com","cw12345678"));
+
     }
     public static  Boolean check(String account,String pwd){
         boolean flag = false;
