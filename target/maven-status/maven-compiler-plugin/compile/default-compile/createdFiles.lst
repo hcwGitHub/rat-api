@@ -14,6 +14,7 @@ mk\anyplex\com\hmvodapi\entry\mapper\EntryMapper.class
 mk\anyplex\com\hmvodapi\common\constants\SignatureKey.class
 mk\anyplex\com\hmvodapi\entry\vo\SearchHirVo.class
 mk\anyplex\com\hmvodapi\file\mapper\FileMapper.class
+mk\anyplex\com\hmvodapi\common\util\EmailUtils$1.class
 mk\anyplex\com\hmvodapi\common\config\FilterConfig.class
 mk\anyplex\com\hmvodapi\entry\service\IEntryService.class
 mk\anyplex\com\hmvodapi\entry\vo\EditHirEntryVo.class
