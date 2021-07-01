@@ -459,7 +459,7 @@ public class EntryController {
      * @return
      */
     @PostMapping("/updatePwd")
-    public Map<String, Object> changePassword(@RequestBody(required = false) EditOcUserEntryVo userEntryVo) {
+    public Map<String, Object> updatePwd(@RequestBody(required = false) EditOcUserEntryVo userEntryVo) {
         Map<String,Object> res = new LinkedHashMap<>();
         int result = entryService.updatePwd(userEntryVo);
         if (result > 0) {
