@@ -6,6 +6,7 @@ import mk.anyplex.com.hmvodapi.common.bean.OcAccount;
 import mk.anyplex.com.hmvodapi.common.constants.Sys;
 import mk.anyplex.com.hmvodapi.common.exception.BusinessException;
 import mk.anyplex.com.hmvodapi.common.tools.CheckOcAccount;
+import mk.anyplex.com.hmvodapi.entry.mapper.EntryMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -32,6 +33,9 @@ public class EmailUtils implements Serializable {
      * */
     @Resource
     private JavaMailSender javaMailSender;
+
+    @Resource
+    private EntryMapper entryMapper;
 
     /**
      * email Sender
@@ -81,7 +85,7 @@ public class EmailUtils implements Serializable {
      * @param text 内容->格式html
      * */
     public void sendEmailOcDept(String subject,String text){
-      List<OcAccount> oclist  =  CheckOcAccount.getAcList();
+      List<OcAccount> oclist  =  entryMapper.acList();
       if (oclist!=null && !oclist.isEmpty()){
           for (OcAccount oc : oclist){
               sendEmail(subject,oc.getAccount(),text);

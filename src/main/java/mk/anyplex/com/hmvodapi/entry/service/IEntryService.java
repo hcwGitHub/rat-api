@@ -84,4 +84,12 @@ public interface IEntryService {
      * */
     List<RatTwc> searchTwc(SearchTwcVo searchTwcVo);
 
+
+    /**
+     * update oc user pwd
+     * @param userEntryVo
+     * @return
+     */
+    int updatePwd(EditOcUserEntryVo userEntryVo);
+
 }

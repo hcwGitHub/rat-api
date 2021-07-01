@@ -438,9 +438,11 @@ public class EntryController {
      * @param ac  Rat oc account
      * */
     @GetMapping("/ocLogin")
-    public Map<String,Object> delHirEntry(OcAccount ac){
+    public Map<String,Object> ocLogin(OcAccount ac){
+        RatOcUser ocUser = entryMapper.checkOcUserLogin(ac.getAccount(), ac.getPwd());
         Map<String,Object> res =  new LinkedHashMap<>(8);
-        if(CheckOcAccount.check(ac.getAccount(),ac.getPwd())){
+        if(ocUser != null){
+            res.put("id", ocUser.getId());
             res.put("result", Sys.SUCCESS);
             res.put("msg",Sys.MESSAGE);
         }else{
@@ -448,6 +450,25 @@ public class EntryController {
             res.put("msg","Incorrect account or password");
         }
 
+        return res;
+    }
+
+    /**
+     * update oc user pwd
+     * @param userEntryVo
+     * @return
+     */
+    @PostMapping("/updatePwd")
+    public Map<String, Object> changePassword(@RequestBody(required = false) EditOcUserEntryVo userEntryVo) {
+        Map<String,Object> res = new LinkedHashMap<>();
+        int result = entryService.updatePwd(userEntryVo);
+        if (result > 0) {
+            res.put("result", Sys.SUCCESS);
+            res.put("msg",Sys.MESSAGE);
+            return res;
+        }
+        res.put("result", Sys.ERRORCODE);
+        res.put("msg",Sys.MESSAGE);
         return res;
     }
 

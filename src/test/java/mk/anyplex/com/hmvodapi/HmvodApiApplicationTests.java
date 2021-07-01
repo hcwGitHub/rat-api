@@ -10,7 +10,6 @@ class HmvodApiApplicationTests {
 
     @Test
     void contextLoads() {
-
     }
 
 
