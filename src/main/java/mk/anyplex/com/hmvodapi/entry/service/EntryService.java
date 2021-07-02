@@ -448,6 +448,14 @@ public class EntryService implements IEntryService{
         return list;
     }
 
+    @Override
+    public int updatePwd(EditOcUserEntryVo userEntryVo) {
+        if (userEntryVo != null) {
+            return entryMapper.updatePwd(userEntryVo);
+        }
+        return 0;
+    }
+
     /**
      * check Hir entry
      * @param hir  hir entry information
