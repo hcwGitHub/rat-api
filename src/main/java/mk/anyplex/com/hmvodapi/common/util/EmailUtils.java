@@ -44,6 +44,8 @@ public class EmailUtils implements Serializable {
     @Value("${spring.mail.username}")
     private  String sender;
 
+    // private static int f ;
+
     /**
      * 发送邮箱通知
      * @param subject 主题
@@ -72,10 +74,20 @@ public class EmailUtils implements Serializable {
                     log.error(e.getMessage()+e);
                     throw new BusinessException(msg);
                 }
+                // try {
+                //     Thread.sleep(f*1000);
+                // } catch (InterruptedException e) {
+                //     e.printStackTrace();
+                // }
                 javaMailSender.send(message);
             }
         });
         thread.start();
+        try {
+            thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return ;
     }
 
@@ -86,11 +98,18 @@ public class EmailUtils implements Serializable {
      * */
     public void sendEmailOcDept(String subject,String text){
       List<OcAccount> oclist  =  entryMapper.acList();
-      if (oclist!=null && !oclist.isEmpty()){
-          for (OcAccount oc : oclist){
-              sendEmail(subject,oc.getAccount(),text);
-          }
-      }
+      Thread th =   new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (oclist!=null && !oclist.isEmpty()){
+                    for (OcAccount oc : oclist){
+
+                        sendEmail(subject,oc.getAccount(),text);
+                    }
+                }
+            }
+        });
+       th.start();
     }
 
 }
