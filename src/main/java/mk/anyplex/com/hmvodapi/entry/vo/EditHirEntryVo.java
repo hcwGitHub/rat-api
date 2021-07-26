@@ -69,4 +69,9 @@ public class EditHirEntryVo implements Serializable {
     private String  send_email;
 
     private String  oc_mobility_type;
+
+    /**
+     * 當前項目
+     */
+    private String identifier;
 }

@@ -59,6 +59,11 @@ public class RatEmailTemplate {
     private String created;
 
     /**
+     * 當前項目
+     */
+    private String identifier;
+
+    /**
      *  id：entry id, not null ;
      *  type: oc  or mobility, not null ;
      *  type_name : null or 1 is twc , 2 is hir  and 3 is hir temp;
@@ -77,6 +82,19 @@ public class RatEmailTemplate {
         getSyntheticEmailText();
     }
 
+    // 21/07/2021 修復郵件鏈接 -> mobility類型構造
+    public RatEmailTemplate(String id, String type ,String type_name, String projectId, String operationType, String created, String identifier) {
+        this.id = id;
+        this.type = type;
+        this.type_name = type_name;
+        this.projectId = projectId;
+        this.operationType = operationType;
+        this.created = created;
+        this.identifier = identifier;
+        // auto
+        getSyntheticEmailText();
+    }
+
     /**
      *  生成email text 主題 and 内容
      * @return String Email text
@@ -84,7 +102,8 @@ public class RatEmailTemplate {
     private RatEmailTemplate  getSyntheticEmailText(){
         // live 环境   openProject https://mobility.chunwo.com
         // oc live https://oc.mobility.chunwo.com
-        String hyperlink = "https://mobility.chunwo.com/projects/nd-2019-04/rat/informative?";
+        // String hyperlink = "https://mobility.chunwo.com/projects/nd-2019-04/rat/informative?";
+        String hyperlink = "https://mobility.chunwo.com/projects/"+identifier+"/rat/informative?";
        String link = "https://oc.mobility.chunwo.com/#/" ;
 
         // uat 环境
@@ -109,7 +128,7 @@ public class RatEmailTemplate {
 
         if (StringUtils.isEmpty(type_name)||"1".equals(type_name)){
             entry = "twc";
-            hyperlink =  hyperlink + "id="+id+"&type="+type+"&type_name="+type_name+"&entry="+entry;
+            hyperlink =  hyperlink + "id="+id+"&type="+type+"&type_name="+type_name+"&entry="+entry+"&identifier="+identifier;
 
             // 1 twc 類型
             if ("1".equals(this.operationType)){
@@ -125,7 +144,7 @@ public class RatEmailTemplate {
 
         }else if ("2".equals(type_name)){
             entry = "hir";
-            hyperlink =  hyperlink + "id="+id+"&type="+type+"&type_name="+type_name+"&entry="+entry;
+            hyperlink =  hyperlink + "id="+id+"&type="+type+"&type_name="+type_name+"&entry="+entry+"&identifier="+identifier;
             // 2 hir 類型
             if ("1".equals(this.operationType)){
                 // 2.1 hir created
@@ -140,7 +159,7 @@ public class RatEmailTemplate {
 
         }else if ("3".equals(type_name)) {
             entry = "hir"; // 也是hir , 不是hir_temp
-            hyperlink =  hyperlink + "id="+id+"&type="+type+"&type_name="+type_name+"&entry="+entry;
+            hyperlink =  hyperlink + "id="+id+"&type="+type+"&type_name="+type_name+"&entry="+entry+"&identifier="+identifier;
             //3 hir temp 類型
             if ("1".equals(this.operationType)){
                 // 3.1 hir temp  created
@@ -178,7 +197,6 @@ public class RatEmailTemplate {
                    .replace("{hyperlink}", linked)
                    .replace("{mainText}", mainText);
         }
-
         return this;
     }
 

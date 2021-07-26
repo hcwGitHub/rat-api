@@ -62,7 +62,7 @@ public class EntryService implements IEntryService{
 
             // Send email notification after create twc entry
             if (twc != null && !StringUtils.isEmpty(twc.getCreator()) && !StringUtils.isEmpty(twc.getCreator_email())){
-              RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(twc.getId().toString(),"mobility","",twc.getProject_id(),"1",twc.getCreator());
+              RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(twc.getId().toString(),"mobility","",twc.getProject_id(),"1",twc.getCreator(),twc.getIdentifier());
                 emailUtils.sendEmail(ratEmailTemplate.getSubject(), twc.getCreator_email(),ratEmailTemplate.getContent());
             }
 
@@ -112,11 +112,11 @@ public class EntryService implements IEntryService{
         String send_email = twc.getSend_email();
         String creator = twc.getCreator();
         if (!StringUtils.isEmpty(creator_email) ){
-            RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(twc.getId().toString(),"mobility","",twc2.getProject_id(),"2",creator);
+            RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(twc.getId().toString(),"mobility","",twc2.getProject_id(),"2",creator, twc.getIdentifier());
             emailUtils.sendEmail(ratEmailTemplate.getSubject(),creator_email,ratEmailTemplate.getContent());
         }
 
-        RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(twc.getId().toString(),twc.getOc_mobility_type(),"",twc2.getProject_id(),"2",creator);
+        RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(twc.getId().toString(),twc.getOc_mobility_type(),"",twc2.getProject_id(),"2",creator, twc.getIdentifier());
         RatEmailTemplate ratEmailTemplate_oc =  new RatEmailTemplate(twc.getId().toString(),"oc","",twc2.getProject_id(),"2",creator);
 
         if ("mobility".equalsIgnoreCase(twc.getOc_mobility_type())){
@@ -171,7 +171,7 @@ public class EntryService implements IEntryService{
             // Send email notification after create hir entry
 
             if (hir != null && !StringUtils.isEmpty(hir.getCreator()) && !StringUtils.isEmpty(hir.getCreator_email())){
-                RatEmailTemplate ratEmailTemplate =new RatEmailTemplate(hir.getId().toString(),"mobility","2",hir.getProject_no(),"1",hir.getCreator());
+                RatEmailTemplate ratEmailTemplate =new RatEmailTemplate(hir.getId().toString(),"mobility","2",hir.getProject_no(),"1",hir.getCreator(),hir.getIdentifier());
                 emailUtils.sendEmail(ratEmailTemplate.getSubject(), hir.getCreator_email(),ratEmailTemplate.getContent());
             }
 
@@ -218,7 +218,7 @@ public class EntryService implements IEntryService{
             saveEntryLog("Created the entry.",hir.getCreator(),hir.getId(),"hir_temp");
             // Send email notification after create hir entry
             if (hir != null && !StringUtils.isEmpty(hir.getCreator()) && !StringUtils.isEmpty(hir.getCreator_email())){
-                RatEmailTemplate ratEmailTemplate =new RatEmailTemplate(hir.getId().toString(),"mobility","3",hir.getProject_no(),"1",hir.getCreator());
+                RatEmailTemplate ratEmailTemplate =new RatEmailTemplate(hir.getId().toString(),"mobility","3",hir.getProject_no(),"1",hir.getCreator(),hir.getIdentifier());
                 emailUtils.sendEmail(ratEmailTemplate.getSubject(), hir.getCreator_email(),ratEmailTemplate.getContent());
             }
             // 群发oc
@@ -270,11 +270,11 @@ public class EntryService implements IEntryService{
 
         // creator_email , send_email 不應該爲空.
         if (!StringUtils.isEmpty(creator_email) ){
-            RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(hir.getId().toString(),"mobility","2",hir2.getProject_no(),"2",creator);
+            RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(hir.getId().toString(),"mobility","2",hir2.getProject_no(),"2",creator,hir.getIdentifier());
             emailUtils.sendEmail(ratEmailTemplate.getSubject(),creator_email,ratEmailTemplate.getContent());
         }
 
-        RatEmailTemplate ratEmailTemplate =   new RatEmailTemplate(hir.getId().toString(),hir.getOc_mobility_type(),"2",hir2.getProject_no(),"2",creator);
+        RatEmailTemplate ratEmailTemplate =   new RatEmailTemplate(hir.getId().toString(),hir.getOc_mobility_type(),"2",hir2.getProject_no(),"2",creator,hir.getIdentifier());
         RatEmailTemplate ratEmailTemplate_oc =   new RatEmailTemplate(hir.getId().toString(),"oc","2",hir2.getProject_no(),"2",creator);
 
         if ("mobility".equalsIgnoreCase(hir.getOc_mobility_type())){
@@ -327,11 +327,11 @@ public class EntryService implements IEntryService{
         String creator = hir.getCreator();
         // creator_email , send_email 不應該爲空.
         if (!StringUtils.isEmpty(creator_email) ){
-            RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(hir.getId().toString(),"mobility","3",hir2.getProject_no(),"2",creator);
+            RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(hir.getId().toString(),"mobility","3",hir2.getProject_no(),"2",creator,hir.getIdentifier());
             emailUtils.sendEmail(ratEmailTemplate.getSubject(),creator_email,ratEmailTemplate.getContent());
         }
 
-        RatEmailTemplate ratEmailTemplate =   new RatEmailTemplate(hir.getId().toString(),hir.getOc_mobility_type(),"3",hir2.getProject_no(),"2",creator);
+        RatEmailTemplate ratEmailTemplate =   new RatEmailTemplate(hir.getId().toString(),hir.getOc_mobility_type(),"3",hir2.getProject_no(),"2",creator,hir.getIdentifier());
         RatEmailTemplate ratEmailTemplate_oc =   new RatEmailTemplate(hir.getId().toString(),"oc","3",hir2.getProject_no(),"2",creator);
 
         if ("mobility".equalsIgnoreCase(hir.getOc_mobility_type())){

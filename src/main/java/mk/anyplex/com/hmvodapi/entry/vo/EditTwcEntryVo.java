@@ -100,6 +100,11 @@ public class EditTwcEntryVo implements Serializable {
 
     private String  oc_mobility_type;
 
+    /**
+     * 當前項目 -> 21/07/2021 修復郵件鏈接
+     */
+    private String identifier;
+
     public void setAcademic_date(String academic_date) {
         if (!StringUtils.isEmpty(academic_date))
             this.academic_date = Integer.valueOf(academic_date.substring(0,4)) + 1 +"";

@@ -71,4 +71,9 @@ public class AddHirEntryVo implements Serializable {
      * */
     private String creator;
 
+    /**
+     * 當前項目 -> 21/07/2021 修復郵件鏈接
+     */
+    private String identifier;
+
 }
