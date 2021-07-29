@@ -327,11 +327,20 @@ public interface EntryMapper {
     int updatePwd(EditOcUserEntryVo userEntryVo);
 
     /**
-     * update oc user status
-     * @param id
-     * @param status
+     * 26/07/2021 新需求: oc用戶可以查看和修改自己的個人資料
+     * Update oc user information
+     * @param userEntryVo
      */
-    @Update("update rat.`rat_oc_user` set status=#{status}, update_time=now() where id=#{id}")
-    void updateOcUser(Integer id, Integer status);
+    @Update("<script>" +
+            "update rat.`rat_oc_user` set" +
+            "<if test='firstName != null'>firstName=#{firstName}, </if>" +
+            "<if test='lastName != null'>lastName=#{lastName}, </if>" +
+            "<if test='status != null'>status=#{status}, </if>" +
+            "name=concat(#{firstName},' ',#{lastName}), " +
+            "update_time=now() where id=#{id}" +
+            "</script>")
+    void updateOcUser(EditOcUserEntryVo userEntryVo);
+    @Select("select id,account,name,firstName,lastName,status from rat.`rat_oc_user` where id=#{id}")
+    RatOcUser findOcUserById(@Param("id") Integer id);
 
 }

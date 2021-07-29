@@ -18,6 +18,17 @@ public class RatOcUser implements Serializable {
     private String account;
     // (pwd)用户密码
     private String pwd;
+
+    /**
+     * 26/07/2021 新需求: oc用戶可以查看和修改自己的個人資料
+     * firstName: 名
+     * lastName: 姓
+     * name: 姓名
+     */
+    private String name;
+    private String firstName;
+    private String lastName;
+
     // (create user date) 用户创建时间
     private Date create_time;
     // (update user date) 用户更新时间

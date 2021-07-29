@@ -92,4 +92,11 @@ public interface IEntryService {
      */
     int updatePwd(EditOcUserEntryVo userEntryVo);
 
+    /**
+     * 26/07/2021 新需求: oc用戶可以查看和修改自己的個人資料
+     * Update oc user information
+     * @param userEntryVo
+     */
+    void updateOcUser(EditOcUserEntryVo userEntryVo);
+
 }

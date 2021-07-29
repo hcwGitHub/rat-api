@@ -457,6 +457,17 @@ public class EntryService implements IEntryService{
     }
 
     /**
+     * 26/07/2021 新需求: oc用戶可以查看和修改自己的個人資料
+     * @param userEntryVo
+     */
+    @Override
+    public void updateOcUser(EditOcUserEntryVo userEntryVo) {
+        if (userEntryVo != null) {
+            entryMapper.updateOcUser(userEntryVo);
+        }
+    }
+
+    /**
      * check Hir entry
      * @param hir  hir entry information
      * @return true: no error  false: error

@@ -80,6 +80,7 @@ public class EmailUtils implements Serializable {
                 //     e.printStackTrace();
                 // }
                 javaMailSender.send(message);
+                // System.out.println("模擬發送電郵");
             }
         });
         thread.start();

@@ -459,7 +459,7 @@ public class EntryController {
      * @return
      */
     @PostMapping("/updatePwd")
-    public Map<String, Object> updatePwd(@RequestBody(required = false) EditOcUserEntryVo userEntryVo) {
+    public Map<String, Object> updatePwd(@RequestBody EditOcUserEntryVo userEntryVo) {
         Map<String,Object> res = new LinkedHashMap<>();
         int result = entryService.updatePwd(userEntryVo);
         if (result > 0) {
@@ -469,6 +469,31 @@ public class EntryController {
         }
         res.put("result", Sys.ERRORCODE);
         res.put("msg",Sys.MESSAGE);
+        return res;
+    }
+
+    /**
+     * 26/07/2021 新需求: oc用戶可以查看和修改自己的個人資料
+     * @param userEntryVo
+     * @return
+     */
+    @PostMapping("/updateOcUser")
+    public Map<String, Object> updateOcUser(@RequestBody EditOcUserEntryVo userEntryVo) {
+        Map<String,Object> res = new LinkedHashMap<>();
+        entryService.updateOcUser(userEntryVo);
+        res.put("result",Sys.SUCCESS);
+        res.put("msg",Sys.MESSAGE);
+        res.put("name", userEntryVo.getFirstName() + " " + userEntryVo.getLastName());
+        return res;
+    }
+
+    @GetMapping("findOcUser")
+    public Map<String, Object> findOcUserById(@RequestParam("id") Integer id) {
+        Map<String,Object> res = new LinkedHashMap<>();
+        RatOcUser ocUser = entryMapper.findOcUserById(id);
+        res.put("result", Sys.SUCCESS);
+        res.put("msg", Sys.MESSAGE);
+        res.put("ocUser",ocUser);
         return res;
     }
 
