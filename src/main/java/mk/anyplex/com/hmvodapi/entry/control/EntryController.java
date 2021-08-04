@@ -151,7 +151,7 @@ public class EntryController {
         String send_email = (String) map.get("send_email");
         // creator_email , send_email 不應該爲空.
         if (!StringUtils.isEmpty(creator_email) ){
-            RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(hir.getId().toString(),"mobility","2",hir.getProject_no(),"2",creator);
+            RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(hir.getId().toString(),"mobility","2",hir.getProject_no(),"2",creator, map.get("identifier").toString());
             emailUtils.sendEmail(ratEmailTemplate.getSubject(),creator_email,ratEmailTemplate.getContent());
         }
 
@@ -201,7 +201,7 @@ public class EntryController {
         String send_email = (String) map.get("send_email");
         // creator_email , send_email 不應該爲空.
         if (!StringUtils.isEmpty(creator_email) ){
-            RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(hir.getId().toString(),"mobility","3",hir.getProject_no(),"2",creator);
+            RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(hir.getId().toString(),"mobility","3",hir.getProject_no(),"2",creator, map.get("identifier").toString());
             emailUtils.sendEmail(ratEmailTemplate.getSubject(),creator_email,ratEmailTemplate.getContent());
         }
 
@@ -251,7 +251,7 @@ public class EntryController {
         String send_email = (String) map.get("send_email");
         // creator_email , send_email 不應該爲空.
         if (!StringUtils.isEmpty(creator_email) ){
-            RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(twc.getId().toString(),"mobility","",twc.getProject_id(),"2",creator);
+            RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(twc.getId().toString(),"mobility","",twc.getProject_id(),"2",creator, map.get("identifier").toString());
             emailUtils.sendEmail(ratEmailTemplate.getSubject(),creator_email,ratEmailTemplate.getContent());
         }
 

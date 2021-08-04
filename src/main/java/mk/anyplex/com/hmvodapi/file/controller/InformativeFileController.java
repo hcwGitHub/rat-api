@@ -100,7 +100,7 @@ public class InformativeFileController {
         response.setCharacterEncoding("utf-8");
         response.setContentLength((int) file.length());
         // fileName 中文编码问题
-        String downloadName = URLEncoder.encode(fileName, "UTF-8");
+        String downloadName = URLEncoder.encode(fileName, "UTF-8").replace("+", "%20");
         response.setHeader("Content-Disposition", "attachment;filename=" + downloadName);
 
         try(BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file))) {

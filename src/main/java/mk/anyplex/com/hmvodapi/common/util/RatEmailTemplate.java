@@ -80,7 +80,7 @@ public class RatEmailTemplate {
         this.created = created;
         // auto
         getSyntheticEmailText();
-        System.out.println("oc->"+this.content);
+        // System.out.println("oc->"+this.content);
     }
 
     // 21/07/2021 修復郵件鏈接 -> mobility類型構造
@@ -94,7 +94,7 @@ public class RatEmailTemplate {
         this.identifier = identifier;
         // auto
         getSyntheticEmailText();
-        System.out.println("mobility->"+this.content);
+        // System.out.println("mobility->"+this.content);
     }
 
     /**
