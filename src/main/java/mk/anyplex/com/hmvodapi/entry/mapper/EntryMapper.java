@@ -343,4 +343,85 @@ public interface EntryMapper {
     @Select("select id,account,name,firstName,lastName,status from rat.`rat_oc_user` where id=#{id}")
     RatOcUser findOcUserById(@Param("id") Integer id);
 
+
+    /**
+     * 02/09/2021 新需求: 添加新TAB(用户信息输入)
+     * save contact details entry information
+     * @param contactDetails
+     */
+    @Insert("insert into rat.`rat_contact_details`(type,divsion,project_no,project_name,attachments,capacity,name,phone_no,email,creator_email,create_time,status) " +
+            "values(#{type},#{divsion},#{project_no},#{project_name},#{attachments},#{capacity},#{name},#{phone_no},#{email},#{creator_email},now(),1)")
+    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
+    int saveContactDetailsEntry(AddContactDetailsEntryVo contactDetails);
+
+    /**
+     * sql: search contact_details
+     *
+     * @param searchContactDetailsVo searchContactDetailsVo
+     * @return List<RatContactDetails> rat_contact_details list
+     */
+    @Select("<script>select *  from rat.`rat_contact_details`  " +
+            "  where status=1 " +
+            "      <if test='project_no != null and project_no!=\"\" '>and project_no = #{project_no}</if>" +
+            "      <if test='project_name != null and project_name!=\"\" '>and project_name = #{project_name}</if>" +
+            "      <if test='division != null and division!=\"\" '>and divsion = #{division}</if>" +
+            "      <if test='approve != null and approve!=\"\" '>and approve = #{approve}</if>" +
+            "  order by project_name desc limit #{startIndex},#{page_size}" +
+            "</script> ")
+    List<RatContactDetails> searchContactDetailsEntry(SearchContactDetailsVo searchContactDetailsVo);
+
+    /**
+     * count rat_contact_details
+     *
+     * @param searchContactDetailsVo searchContactDetailsVo
+     * @return int  count
+     */
+    @Select("<script>select count(1)  from rat.`rat_contact_details`  " +
+            "  where status=1 " +
+            "      <if test='project_no != null and project_no!=\"\" '>and project_no = #{project_no}</if>" +
+            "      <if test='project_name != null and project_name!=\"\" '>and project_name = #{project_name}</if>" +
+            "      <if test='division != null and division!=\"\" '>and divsion = #{division}</if>" +
+            "      <if test='approve != null and approve!=\"\" '>and approve = #{approve}</if>" +
+            "</script> ")
+    int countContactDetailsEntry(SearchContactDetailsVo searchContactDetailsVo);
+
+    /**
+     * find Contact Details entry by id
+     *
+     * @param id
+     * @return RatContactDetails
+     */
+    @Select("select id,type,approve,divsion,project_no,project_name,reason_of_rejected," +
+            "attachments ,capacity,name,phone_no,email,creator_email,create_time,DATE_FORMAT(create_time,'%Y-%m-%d')  create_time_str," +
+            " update_time, DATE_FORMAT(update_time,'%Y-%m-%d') as update_time_str,status" +
+            " from rat.`rat_contact_details` where id = #{id} ")
+    RatContactDetails findContactDetailsEntryById(@Param("id") int id);
+
+    /**
+     * update twc entry approve status and remark
+     */
+    @Update("<script>" +
+            "update rat.`rat_contact_details` set approve = #{approve}," +
+            "<if test='reason_of_rejected != null'> reason_of_rejected = #{reason_of_rejected}, </if>" +
+            "update_time= now() where id = #{id} " +
+            "</script>")
+    void updateContactDetailsApprove(Integer id, String approve, String reason_of_rejected);
+
+    /**
+     * del contact details entry by id
+     *
+     * @param id
+     */
+    @Update("update rat.`rat_contact_details` set status = 0 and update_time = now() where id =#{id}")
+    void delContactDetailsEntryById(@Param("id") int id);
+
+    /**
+     * edit contactDetails information
+     *
+     * @param contactDetails
+     */
+    @Update("update rat.`rat_contact_details` " +
+            " set type=#{type},approve=#{approve},divsion=#{divsion},project_no=#{project_no},project_name=#{project_name},attachments=#{attachments}" +
+            ",capacity=#{capacity},name=#{name},phone_no=#{phone_no},email=#{email},update_time=now() where id =#{id}")
+    void EditContactDetailsEntry(EditContactDetailsEntryVo contactDetails);
 }

@@ -428,6 +428,8 @@ public class EntryService implements IEntryService{
             }else if ("hir_temp".equals(type)){
                 // del hir temp(copy hir) entry
                 entryMapper.delHirTempEntryById(id);
+            } else if ("contact_details".equalsIgnoreCase(type)) {
+                entryMapper.delContactDetailsEntryById(id);
             }
         }
     }
@@ -468,6 +470,131 @@ public class EntryService implements IEntryService{
     }
 
     /**
+     * 02/09/2021 新需求: 添加新TAB(用户信息输入)
+     * @param contactDetails
+     */
+    @Override
+    public void saveContactDetailsEntry(AddContactDetailsEntryVo contactDetails) {
+        // check contactDetails
+        if (!checkContactDetails(contactDetails)){
+            throw  new BusinessException("Missing request parameters");
+        }
+        try {
+            entryMapper.saveContactDetailsEntry(contactDetails);
+            // save twc files
+            RatEntryFile entryFile = new RatEntryFile();
+            entryFile.setCreate_time(new Date());
+            entryFile.setCreator(contactDetails.getCreator());
+            entryFile.setType("contact_details");
+            // twc key
+            entryFile.setEntry_id(contactDetails.getId());
+            String files = contactDetails.getAttachments();
+            if (!StringUtils.isEmpty(files)){
+                String[] filesArray = files.split(",");
+                for (String fileName : filesArray){
+                    entryFile.setFile_name(fileName);
+                    // save entry file infomation
+                    entryMapper.saveEntryFile(entryFile);
+                }
+                //  save files log
+                saveEntryLog("Uploaded files: "+ files ,contactDetails.getCreator(),contactDetails.getId(),"contact_details");
+            }
+            // save entry log
+            saveEntryLog("Created the entry.",contactDetails.getCreator(),contactDetails.getId(),"contact_details");
+            // Send email notification after create contactDetails entry
+
+            if (contactDetails != null && !StringUtils.isEmpty(contactDetails.getCreator()) && !StringUtils.isEmpty(contactDetails.getCreator_email())){
+                RatEmailTemplate ratEmailTemplate =new RatEmailTemplate(contactDetails.getId().toString(),"mobility","4",contactDetails.getProject_no(),"1",contactDetails.getCreator(),contactDetails.getIdentifier());
+                emailUtils.sendEmail(ratEmailTemplate.getSubject(), contactDetails.getCreator_email(),ratEmailTemplate.getContent());
+            }
+
+            // 群发oc
+            RatEmailTemplate ratEmailTemplate =new RatEmailTemplate(contactDetails.getId().toString(),"oc","4",contactDetails.getProject_no(),"1",contactDetails.getCreator());
+            emailUtils.sendEmailOcDept(ratEmailTemplate.getSubject(),ratEmailTemplate.getContent());
+
+
+        }catch (Exception e){
+            log.error(e.getMessage());
+            throw new BusinessException("save Contact Details entry failure");
+        }
+    }
+
+    @Override
+    public RatContactDetails findContactDetailsEntry(Integer id) {
+        if (id == null || id == 0){
+            throw  new BusinessException("Missing request parameters");
+        }
+        RatContactDetails contactDetails = null;
+        try {
+            contactDetails = entryMapper.findContactDetailsEntryById(id);
+        } catch (Exception e){
+            log.error(e.getMessage());
+            throw new BusinessException("find Contact Details entry information failure! ");
+        }
+        return contactDetails;
+    }
+
+    @Override
+    public void editContactDetailsEntry(EditContactDetailsEntryVo contactDetails) {
+        // check twc
+        if (!checkEditContactDetails(contactDetails)){
+            throw  new BusinessException("Missing request parameters");
+        }
+        entryMapper.EditContactDetailsEntry(contactDetails);
+        // save contactDetails files
+        RatEntryFile entryFile = new RatEntryFile();
+        entryFile.setCreate_time(new Date());
+        entryFile.setCreator(contactDetails.getCreator());
+        entryFile.setType("contact_details");
+        // contactDetails key
+        entryFile.setEntry_id(contactDetails.getId());
+        String files = contactDetails.getAttachments();
+        if (!StringUtils.isEmpty(files)){
+            String[] filesArray = files.split(",");
+            for (String fileName : filesArray){
+                entryFile.setFile_name(fileName);
+                // save entry file infomation
+                entryMapper.saveEntryFile(entryFile);
+            }
+            //  save files log
+            saveEntryLog("Uploaded files: " + files ,contactDetails.getCreator(),contactDetails.getId(),"contact_details");
+        }
+        // save  entry log
+        saveEntryLog("Edit the entry.",contactDetails.getCreator(),contactDetails.getId(),"contact_details");
+
+        // 需要發送email ， 接收人包括當前用戶(send_email) 和創建用戶(creator_email)
+        RatContactDetails contactDetails2 = entryMapper.findContactDetailsEntryById(contactDetails.getId());
+        String creator_email = contactDetails2.getCreator_email();
+        String send_email = contactDetails.getSend_email();
+        String creator = contactDetails.getCreator();
+        if (!StringUtils.isEmpty(creator_email) ){
+            RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(contactDetails.getId().toString(),"mobility","4",contactDetails2.getProject_no(),"2",creator, contactDetails.getIdentifier());
+            emailUtils.sendEmail(ratEmailTemplate.getSubject(),creator_email,ratEmailTemplate.getContent());
+        }
+
+        RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(contactDetails.getId().toString(),contactDetails.getOc_mobility_type(),"4",contactDetails2.getProject_no(),"2",creator, contactDetails.getIdentifier());
+        RatEmailTemplate ratEmailTemplate_oc =  new RatEmailTemplate(contactDetails.getId().toString(),"oc","4",contactDetails2.getProject_no(),"2",creator);
+
+        if ("mobility".equalsIgnoreCase(contactDetails.getOc_mobility_type())){
+            // 如果操作对象是mobility , 也应该通知这个人.
+            if (!StringUtils.isEmpty(send_email) && !send_email.equals(creator_email)) {
+                emailUtils.sendEmailOcDept(ratEmailTemplate.getSubject(), ratEmailTemplate.getContent());
+            }
+        }
+        // 群发OC dept , 无论getOc_mobility_type 是什么,都必须通知OC dept
+        emailUtils.sendEmailOcDept(ratEmailTemplate_oc.getSubject(),ratEmailTemplate_oc.getContent());
+    }
+
+
+    private boolean checkEditContactDetails(EditContactDetailsEntryVo contactDetails) {
+        boolean flag =true;
+        if (contactDetails==null || contactDetails.getId() == null || contactDetails.getId()==0){
+            flag = false;
+        }
+        return  flag;
+    }
+
+    /**
      * check Hir entry
      * @param hir  hir entry information
      * @return true: no error  false: error
@@ -489,6 +616,20 @@ public class EntryService implements IEntryService{
         boolean flag = true;
         // creator_email 暫時允許爲空, 爲空，不發 email
         if (twc == null || StringUtils.isEmpty(twc.getType()) || StringUtils.isEmpty(twc.getProject_name()) ){
+            flag = false;
+        }
+        return flag;
+    }
+
+    /**
+     *  check contactDetails entry information
+     * @param contactDetails
+     * @return  true: no error  false: error
+     * */
+    private boolean checkContactDetails(AddContactDetailsEntryVo contactDetails) {
+        boolean flag = true;
+        // creator_email 暫時允許爲空, 爲空，不發 email
+        if (contactDetails == null || StringUtils.isEmpty(contactDetails.getType()) || StringUtils.isEmpty(contactDetails.getProject_name()) ){
             flag = false;
         }
         return flag;

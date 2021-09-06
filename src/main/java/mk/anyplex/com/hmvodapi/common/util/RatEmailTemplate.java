@@ -36,6 +36,7 @@ public class RatEmailTemplate {
      *  0 : twc
      *  1: hir
      *  2: hir_temp
+     *  3: contact_details
      * */
     private String type_name;
 
@@ -115,6 +116,7 @@ public class RatEmailTemplate {
 
        String twcLink = link+"techdSection2/viewTwcDetail?id={id}&type={type}&email=0";
        String hirOrHirTempLink = link+ "techdSection3/viewHirDetail?id={id}&type={type}&type_name={type_name}&email=0";
+       String contactDetailsLink = link+"techdSection4/viewContactDetail?id={id}&type={type}&email=0";
 
         content = "<html>\n" +
                 "<body>\n" +
@@ -174,6 +176,21 @@ public class RatEmailTemplate {
                 mainText = "updated the Temporary Works Submission Schedule entry.";
             }
 
+        }else if ("4".equals(type_name)) {
+            entry = "contact_details";
+            hyperlink =  hyperlink + "id="+id+"&type="+type+"&type_name="+type_name+"&entry="+entry+"&identifier="+identifier;
+            //4 contact details 類型
+            if ("1".equals(this.operationType)){
+                // 4.1 contact details  created
+                subject = "[RAT] ("+ projectId+")New Contact Details of Management Staff, TWC and Engineers" ;
+                mainText = "made a new Contact Details of Management Staff, TWC and Engineers entry.";
+
+            }else{
+                // 4.2  hir temp  update
+                subject =  "[RAT] ("+projectId+") Update Contact Details of Management Staff, TWC and Engineers";
+                mainText = "updated the Contact Details of Management Staff, TWC and Engineers entry.";
+            }
+
         }
         // replace
 
@@ -190,9 +207,12 @@ public class RatEmailTemplate {
             if (StringUtils.isEmpty(type_name) || "1".equals(type_name)){
                 // twc
                 linked = twcLink.replace("{id}",id).replace("{type}",type);
-            }else {
+            }else if ("2".equals(type_name) || "3".equals(type_name)){
                 // hir or hir temp ;
                 linked = hirOrHirTempLink.replace("{id}", id).replace("{type}", type).replace("{type_name}", type_name);
+            } else if ("4".equals(type_name)) {
+                // contact details
+                linked = contactDetailsLink.replace("{id}",id).replace("{type}",type);
             }
 
            this.content = content.replace("{created}", created)

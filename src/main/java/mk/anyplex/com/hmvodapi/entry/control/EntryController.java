@@ -498,4 +498,116 @@ public class EntryController {
     }
 
 
+    /**
+     * 02/09/2021 新需求: 添加新TAB(用户信息输入)
+     */
+    @PostMapping("/addContactDetailsEntry")
+    public Map<String,Object> addContactDetailsEntry(@RequestBody AddContactDetailsEntryVo contactDetails){
+        Map<String,Object> res = new LinkedHashMap<>();
+        entryService.saveContactDetailsEntry(contactDetails);
+        res.put("result", Sys.SUCCESS);
+        res.put("msg",Sys.MESSAGE);
+        return res;
+    }
+
+    /**
+     *  search hir entry
+     * @param searchContactDetailsVo  search hir vo
+     * @return map data
+     * */
+    @GetMapping("/searchContactDetails")
+    public Map<String,Object> searchContactDetails(SearchContactDetailsVo searchContactDetailsVo){
+        Map<String,Object> res =  new LinkedHashMap<>();
+
+        if (searchContactDetailsVo == null){
+            searchContactDetailsVo =  new SearchContactDetailsVo();
+        }
+        searchContactDetailsVo.setStartIndex((searchContactDetailsVo.getPage()-1)*searchContactDetailsVo.getPage_size());
+        List<RatContactDetails> list = entryMapper.searchContactDetailsEntry(searchContactDetailsVo);
+        int count = entryMapper.countContactDetailsEntry(searchContactDetailsVo);
+        int pageTotal = count % (searchContactDetailsVo.getPage_size()) ==0?count/searchContactDetailsVo.getPage_size() : ( count/searchContactDetailsVo.getPage_size() + 1);
+        res.put("result", Sys.SUCCESS);
+        res.put("msg",Sys.MESSAGE);
+        res.put("contact_details_list",list);
+        res.put("count",count);
+        res.put("pageTotal",pageTotal);
+        res.put("page",searchContactDetailsVo.getPage());
+        res.put("page_size",searchContactDetailsVo.getPage_size());
+        return res;
+    }
+
+    /**
+     *   find Hir entry information by hir_id
+     * @param id  hir_id
+     * */
+    @GetMapping("/findContactDetailsEntryDetail")
+    public Map<String,Object> findContactDetailsEntryDetail(@RequestParam("id") Integer id){
+        Map<String,Object> res = new LinkedHashMap<>();
+        RatContactDetails contactDetails = entryService.findContactDetailsEntry(id);
+        List<RatEntryLog> logs = entryMapper.findEntryLogByEntryId(id,"contact_details");
+        List<RatEntryFile> files = entryMapper.findEntryFileByEntryId(id,"contact_details");
+        res.put("result", Sys.SUCCESS);
+        res.put("msg",Sys.MESSAGE);
+        res.put("entry",contactDetails);
+        res.put("files",files);
+        res.put("logs",logs);
+        return res;
+    }
+
+    /**
+     *  edit ContactDetails entry approve status
+     * @param map
+     * */
+    @PostMapping("/editContactDetailsEntryApprove")
+    public Map<String,Object> editContactDetailsEntry(@RequestBody Map<String,Object> map){
+        Map<String,Object> res = new LinkedHashMap<>();
+        String remark = null;
+        if (map!=null && map.containsKey("remark")){
+            remark = (String) map.get("remark");
+            remark = "".equals(remark)  ? null: remark;
+        }
+        String approve = (String) map.get("approve") ;
+        int id = (Integer) map.get("id");
+        String creator = (String) map.get("creator");
+        // if approve is 'rejected', update reason_of_rejected
+        // else update remark;
+        entryMapper.updateContactDetailsApprove(id,approve,remark);
+        RatEntryLog log = new RatEntryLog();
+        // save log
+        log.setType("contact_details");
+        log.setEvent("update entry status to " + approve);
+        log.setEntry_id(id);
+        log.setCreator(creator);
+        entryMapper.saveEntryLog(log);
+
+        // 需要發送email ， 接收人包括當前用戶(send_email) 和創建用戶(creator_email)
+        RatContactDetails contactDetails = entryMapper.findContactDetailsEntryById(id);
+        String creator_email = contactDetails.getCreator_email();
+        String send_email = (String) map.get("send_email");
+        // creator_email , send_email 不應該爲空.
+        if (!StringUtils.isEmpty(creator_email) ){
+            RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(contactDetails.getId().toString(),"mobility","4",contactDetails.getProject_no(),"2",creator, map.get("identifier").toString());
+            emailUtils.sendEmail(ratEmailTemplate.getSubject(),creator_email,ratEmailTemplate.getContent());
+        }
+
+        // 群发 OC  -- 新需求 2021-06-16
+        RatEmailTemplate ratEmailTemplate =  new RatEmailTemplate(contactDetails.getId().toString(),"oc","4",contactDetails.getProject_no(),"2",creator);
+        emailUtils.sendEmailOcDept(ratEmailTemplate.getSubject(),ratEmailTemplate.getContent());
+
+//        emailUtils.sendEmail(ratEmailTemplate.getSubject(),"972606984@qq.com",ratEmailTemplate.getContent());
+//        emailUtils.sendEmail(ratEmailTemplate.getSubject(),"sean.wan@chunwo.com",ratEmailTemplate.getContent());
+
+        res.put("result", Sys.SUCCESS);
+        res.put("msg",Sys.MESSAGE);
+        return res;
+    }
+
+    @PostMapping("/EditContactDetailsEntry")
+    public Map<String,Object> editContactDetailsEntry(@RequestBody EditContactDetailsEntryVo contactDetails){
+        Map<String,Object> res = new LinkedHashMap<>();
+        entryService.editContactDetailsEntry(contactDetails);
+        res.put("result", Sys.SUCCESS);
+        res.put("msg",Sys.MESSAGE);
+        return res;
+    }
 }

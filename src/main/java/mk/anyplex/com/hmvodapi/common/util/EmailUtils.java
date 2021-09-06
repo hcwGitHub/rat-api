@@ -79,7 +79,7 @@ public class EmailUtils implements Serializable {
                 // } catch (InterruptedException e) {
                 //     e.printStackTrace();
                 // }
-                javaMailSender.send(message);
+                // javaMailSender.send(message);
                 // System.err.println("Send email success...");
             }
         });

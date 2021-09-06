@@ -1,6 +1,7 @@
 package mk.anyplex.com.hmvodapi.entry.service;
 
 import mk.anyplex.com.hmvodapi.entry.vo.*;
+import mk.anyplex.com.hmvodapi.pojo.RatContactDetails;
 import mk.anyplex.com.hmvodapi.pojo.RatHir;
 import mk.anyplex.com.hmvodapi.pojo.RatHirTemp;
 import mk.anyplex.com.hmvodapi.pojo.RatTwc;
@@ -99,4 +100,22 @@ public interface IEntryService {
      */
     void updateOcUser(EditOcUserEntryVo userEntryVo);
 
+    /**
+     * 02/09/2021 新需求: 添加新TAB(用户信息输入)
+     * add contact details entry information
+     */
+    void saveContactDetailsEntry(AddContactDetailsEntryVo contactDetails);
+
+    /**
+     *    find ContactDetails entry information by id
+     * @param id  contactDetails_id
+     * @Return ContactDetails entry
+     * */
+    RatContactDetails findContactDetailsEntry(Integer id);
+
+    /**
+     *  edit contact Details entry information
+     * @param contactDetails
+     * */
+    void editContactDetailsEntry(EditContactDetailsEntryVo contactDetails);
 }

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="LeetcodeEditor">
+    <option name="projectConfig">
+      <map>
+        <entry key="$PROJECT_DIR$/../../../Leetcode Editor/leetcode/editor/cn/[233]数字 1 的个数.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="path" value="$PROJECT_DIR$/../../../Leetcode Editor/leetcode/editor/cn/[233]数字 1 的个数.java" />
+              <option name="questionId" value="233" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../../../Leetcode Editor/leetcode/editor/cn/[36]有效的数独.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="path" value="$PROJECT_DIR$/../../../Leetcode Editor/leetcode/editor/cn/[36]有效的数独.java" />
+              <option name="questionId" value="36" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../../../Leetcode Editor/leetcode/editor/cn/[3]无重复字符的最长子串.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="path" value="$PROJECT_DIR$/../../../Leetcode Editor/leetcode/editor/cn/[3]无重复字符的最长子串.java" />
+              <option name="questionId" value="3" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
